@@ -1,44 +1,63 @@
-/* global React, ReactDOM */
-var movies = [
-  {
-    id: 1,
-    title: 'Harry Potter',
-    desc: 'film o czarodzieju',
-    poster: 'https://www.harrypottermovieposters.com/wp-content/uploads/2013/08/harry-potter-and-the-order-of-the-phoenix-movie-poster-style-d.jpg',
-    posterAlt: 'Plakat filmu Harry Potter'
+/* global React, ReactDOM, movies */
+
+let Movie  = React.createClass({
+  propTypes:{
+    movie: React.PropTypes.object.isRequired
   },
-  {
-    id: 2,
-    title: 'Król Lew',
-    desc: 'Film o królu sawanny',
-    poster: 'http://ocdn.eu/images/pulscms/NDM7MDMsMCwyZDAsMSwx/6aa256421ac366f026c59dd255320a42.jpg',
-    posterAlt: 'Plakat filmu Król Lew'
-  },
-  {
-    id: 3,
-    title: 'Piraci z karaibów',
-    desc: 'Film o piratach z karaibów',
-    poster: 'https://static.posters.cz/image/1300/47521.jpg',
-    posterAlt: 'Plakat filmu Piraci z Karaibów'
-  },
-  {
-    id: 4,
-    title: 'Thor',
-    desc: 'Film o Thorze',
-    poster: 'https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/5/5a/Thor_Official_Poster.jpg/revision/latest?cb=20121220212004',
-    posterAlt: 'Plakat filmu o Thorze'
-  }
-];
-var moviesElements = movies.map(function(movie) {
-  return React.createElement('li', {key: movie.id},
-      React.createElement('h2', {}, movie.title),
-      React.createElement('p', {}, movie.desc),
-      React.createElement('img', {src: movie.poster, alt: movie.posterAlt})
+  render(){
+    return(
+      React.createElement('li', {},
+        React.createElement(MoviesTitle, {title: this.props.movie.title}),
+        React.createElement(MoviesDesc, {desc: this.props.movie.desc}),
+        React.createElement(MoviesPoster, {poster: this.props.movie.poster})
+      )
     );
-});
-var element =
+  }
+}),
+
+MoviesTitle = React.createClass({
+  propsType:{
+    title: React.PropTypes.string.isRequired
+  },
+  render(){
+    return React.createElement('h1', {}, this.props.title);
+  }
+}),
+
+MoviesDesc = React.createClass({
+  propsType:{
+    desc: React.PropTypes.string.isRequired
+  },
+  render(){
+    return React.createElement('p', {}, this.props.desc);
+  }
+}),
+
+MoviesPoster = React.createClass({
+  propsType:{
+    poster: React.PropTypes.object.isRequired
+  },
+  render(){
+    return React.createElement('img', {src: this.props.poster});
+  }
+}),
+
+MovieList = React.createClass({
+  propTypes: {
+    movies: React.PropTypes.array.isRequired
+  },
+  render(){
+    let moviesElements = this.props.movies.map((movie) => {
+      return React.createElement(Movie, {movie, key: movie.id});
+    });
+    return React.createElement('ul', {}, moviesElements);
+  }
+}),
+
+element =
   React.createElement('div', {},
     React.createElement('h1', {}, 'Lista filmów'),
-    React.createElement('ul', {}, moviesElements)
+    React.createElement(MovieList, {movies})
   );
+
 ReactDOM.render(element, document.getElementById('app'));
